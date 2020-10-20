@@ -1,0 +1,5 @@
+/build/
+key_vault/
+nbproject/private/*
+/dist/
+data/

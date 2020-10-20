@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=PDF Signer
+Type=Application
+Comment=Eko Junaidi Salam <eko.junaidi.salam@gmail.com>
+Terminal=true
+Exec=/usr/bin/java -jar pdf_signer.jar keystore.p12 dokumen/ -p params.json
+Icon=seahorse-key.png
+Categories=Application;
+GenericName=PDF signer
+Keywords=system;process;task;digital signature;
