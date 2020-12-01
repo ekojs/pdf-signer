@@ -77,7 +77,7 @@
         <copy file="CHANGELOG.md" todir="${dist.dir}" />
         <copy file="buat_sertifikat.bat" todir="${dist.dir}" />
         <copy file="cek_java.bat" todir="${dist.dir}" />
-        <copy file="signer_bat" todir="${dist.dir}" />
+        <copy file="signer.bat" todir="${dist.dir}" />
         <copy file="README.TXT" todir="${dist.dir}" />
         <!-- Folder(s) -->
         <copy todir="${dist.dir}/res"><fileset dir="res"/></copy>

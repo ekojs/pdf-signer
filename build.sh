@@ -24,7 +24,7 @@ cat << EOF > MANIFEST
 Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.9.7
 Created-By: 1.8.0_201-b09 (Oracle Corporation)
-Class-Path: lib/gson-2.8.6.jar lib/commons-codec-1.11.jar lib/commons-logging-1.2.jar lib/pdfbox-2.0.19.jar lib/bcprov-jdk15on-165.jar lib/bcpkix-jdk15on-165.jar lib/fontbox-2.0.19.jar
+Class-Path: lib/gson-2.8.6.jar lib/commons-codec-1.11.jar lib/commons-logging-1.2.jar lib/pdfbox-2.0.21.jar lib/bcprov-jdk15on-165.jar lib/bcpkix-jdk15on-165.jar lib/fontbox-2.0.21.jar
 Main-Class: digsig.PDFSigner
 EOF
 
@@ -36,4 +36,5 @@ cp -pR *.bat dist/
 cp -pR LICENSE dist/
 rm -f MANIFEST
 
+#zip -r pdf_signer.zip dist/
 printf "${white}%s${endc} ${green}%s${endc}\n" "status :" "Compile finished..."
