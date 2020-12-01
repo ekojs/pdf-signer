@@ -23,20 +23,24 @@
  */
 package egen;
 
+import customEx.CertificateVerificationException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.X509Certificate;
+import org.bouncycastle.tsp.TSPException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import validation.AddValidationInformation;
 
 /**
  *
@@ -125,14 +129,37 @@ public class FileEncryptionTest {
     /**
      * Test of signPDF method, of class FileEncryption.
      * @throws java.io.IOException
+     * @throws java.security.GeneralSecurityException
+     * @throws org.bouncycastle.tsp.TSPException
+     * @throws customEx.CertificateVerificationException
      */
     @Test
-    public void testSignPDF() throws IOException {
+    public void testSignPDF() throws IOException, GeneralSecurityException, TSPException, TSPException, CertificateVerificationException {
         System.out.println("signPDF");
         KeyStore ks = fe.loadKeystore(new File(keystorePath), password);
         File pdf = new File(inDir+pdfFile);
-        fe.signPDF(pdf, ks, alias, password, "Created and signed");
+        String tsaUrl = "https://freetsa.org/tsr";
+        String tsaUsername = null;
+        String tsaPassword = null;
+        fe.signPDF(pdf, ks, alias, password, "Created and signed",tsaUrl,tsaUsername,tsaPassword);
         assertTrue(Files.exists(Paths.get(pdf.getParent()+"/sign_me_signed.pdf")));
+        
+        System.out.println("Add LTV Validation");
+        // add ocspInformation
+        AddValidationInformation addOcspInformation = new AddValidationInformation();
+
+        File inFile = new File(pdf.getParent()+"/sign_me_signed.pdf");
+        String name = inFile.getName();
+        String substring = name.substring(0, name.lastIndexOf('.'));
+
+        File outFile = new File(inFile.getParent(), substring + "_LTV.pdf");
+        addOcspInformation.validateSignature(inFile, outFile);
+        
+        System.out.println("Show Signature");
+        ShowSignature ss = new ShowSignature();
+        ss.showSignature(pdf.getParent()+"/sign_me_signed.pdf");
+        
         Files.deleteIfExists(Paths.get(pdf.getParent()+"/sign_me_signed.pdf"));
+        Files.deleteIfExists(Paths.get(pdf.getParent()+"/sign_me_signed_LTV.pdf"));
     }
 }

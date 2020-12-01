@@ -48,6 +48,10 @@ public class SignatureBase implements SignatureInterface {
     private PrivateKey privateKey;
     private Certificate[] certificateChain;
     private X509Certificate x509cert;
+    private String tsaUrl;
+    private String tsaUsername = null;
+    private String tsaPassword = null;
+    
     
     /**
      * Initialize the signature creator with a keystore (pkcs12) and pin that should be used for the
@@ -111,6 +115,21 @@ public class SignatureBase implements SignatureInterface {
     {
         return certificateChain;
     }
+    
+    public void setTsaUrl(String tsaUrl)
+    {
+        this.tsaUrl = tsaUrl;
+    }
+    
+    public void setTsaUsername(String tsaUsername)
+    {
+        this.tsaUsername = tsaUsername;
+    }
+    
+    public void setTsaPassword(String tsaPassword)
+    {
+        this.tsaPassword = tsaPassword;
+    }
 
     /**
      * Sign PDF File
@@ -129,6 +148,11 @@ public class SignatureBase implements SignatureInterface {
             gen.addCertificates(new JcaCertStore(Arrays.asList(certificateChain)));
             CMSProcessableInputStream msg = new CMSProcessableInputStream(content);
             CMSSignedData signedData = gen.generate(msg, false);
+            
+            if (tsaUrl != null && tsaUrl.length() > 0){
+                ValidationTimeStamp validation = new ValidationTimeStamp(tsaUrl,tsaUsername,tsaPassword);
+                signedData = validation.addSignedTimeStamp(signedData);
+            }
             
             return signedData.getEncoded();
         }catch (GeneralSecurityException | CMSException | OperatorCreationException e){

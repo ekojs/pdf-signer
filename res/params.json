@@ -1,4 +1,7 @@
 {
 	"alias" : "digsig",
-	"reason" : "Created"
+	"reason" : "Created",
+	"tsaUrl" : "https://freetsa.org/tsr",
+	"tsaUsername" : "",
+	"tsaPassword" : ""
 }

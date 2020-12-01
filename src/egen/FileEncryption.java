@@ -234,8 +234,11 @@ public class FileEncryption {
      * @param alias
      * @param pin
      * @param reason 
+     * @param tsaUrl 
+     * @param tsaUsername 
+     * @param tsaPassword 
      */
-    public void signPDF(File pdfFile,KeyStore keystore, String alias, String pin, String reason){
+    public void signPDF(File pdfFile,KeyStore keystore, String alias, String pin, String reason, String tsaUrl, String tsaUsername, String tsaPassword){
         try{
             // sign PDF
             PDFSignature signing = new PDFSignature(keystore, alias, pin.toCharArray());
@@ -253,6 +256,9 @@ public class FileEncryption {
             signing.setAuthorName(IETFUtils.valueToString(cn.getFirst().getValue()));
             signing.setLocation(IETFUtils.valueToString(loc.getFirst().getValue()));
             signing.setReason(reason);
+            signing.setTsaUrl(tsaUrl);
+            signing.setTsaUsername(tsaUsername);
+            signing.setTsaPassword(tsaPassword);
             signing.signDetached(pdfFile, outFile);
             System.out.println("PDF File "+ pdfFile.getName() +" Signed");
         }catch(KeyStoreException | CertificateEncodingException ex){
